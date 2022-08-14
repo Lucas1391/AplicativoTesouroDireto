@@ -1,38 +1,83 @@
-from collections import namedtuple
-import altair as alt
-import math
-import pandas as pd
 import streamlit as st
+import pandas as pd
+import numpy as np
+import ssl
+from PIL import Image
 
-"""
-# Welcome to Streamlit!
+#image = Image.open("TESOURO.png")
+#st.image(image,width=300)
+st.title("APLICATIVO JANELA DO TESOURO")
 
-Edit `/streamlit_app.py` to customize this app to your heart's desire :heart:
+pd.set_option("display.max_colwidth", 150)
+pd.set_option("display.min_rows", 20)
+ssl._create_default_https_context = ssl._create_unverified_context
 
-If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
-forums](https://discuss.streamlit.io).
+#Função que busca dos títulos
+def busca_titulos_tesouro_direto():
+    url = 'https://www.tesourotransparente.gov.br/ckan/dataset/df56aa42-484a-4a59-8184-7676580c81e3/resource/796d2059-14e9-44e3-80c9-2d9e30b405c1/download/PrecoTaxaTesouroDireto.csv'
+    df = pd.read_csv(url, sep=';',decimal=',')
+    df['Data Vencimento'] = pd.to_datetime(df['Data Vencimento'],dayfirst=True)
+    df['Data Base'] = pd.to_datetime(df['Data Base'], dayfirst=True)
+    multi_indice = pd.MultiIndex.from_frame(df.iloc[:,:3])
+    df = df.set_index(multi_indice).iloc[:,3:]
+    return df
 
-In the meantime, below is an example of what you can do with just a few lines of code:
-"""
+titulos = busca_titulos_tesouro_direto()
+titulos.sort_index(inplace=True)
+tipos_titulos = titulos.index.droplevel(level=1).droplevel(level=1).drop_duplicates().to_list()
+st.write("I) Aplicativo janela do tesouro avalia uma determinda taxa dado e a classifica em janela pessima,ruim,boa ou otima de compra")
+st.write("II) Os dados do tesouro são obtidos por meio do endereço : https://www.tesourotransparente.gov.br")
+st.write("III)E utilizado a Métrica dos quartiz para avaliar a taxa inserida e classifica-lá.")
+st.write("IV) Acesse a pagina do tesouro no endereço abaixo e consulte a data de vencimento do titulo escolhido")
+st.write("V) Pagina do Tesouro https://www.tesourodireto.com.br/titulos/precos-e-taxas.htm")
 
 
-with st.echo(code_location='below'):
-    total_points = st.slider("Number of points in spiral", 1, 5000, 2000)
-    num_turns = st.slider("Number of turns in spiral", 1, 100, 9)
+Titulo = st.sidebar.selectbox("Escolha o título desejado ", tipos_titulos)
+vencimento = st.sidebar.text_input("Entre coma data de vencimento no formato ano-mês-dia")
+taxa = st.sidebar.number_input("Entre com o valor da Taxa atual")
+if taxa:
+    Titulo_Tesouro = titulos.loc[(Titulo,vencimento)]
+    filtro = Titulo_Tesouro.iloc[len(Titulo_Tesouro)-200:len(Titulo_Tesouro),:]
+    quartiz = np.percentile(filtro['Taxa Compra Manha'],[0, 25, 50, 75, 100])
+    media = filtro['Taxa Compra Manha'].mean()
+    desvio_padrao = filtro['Taxa Compra Manha'].std()
 
-    Point = namedtuple('Point', 'x y')
-    data = []
+    janela = "Neutra"
+    if (taxa < quartiz[1]) and (taxa > quartiz[0]):
+        janela = janela
+    elif (taxa <= quartiz[2]) and (taxa > quartiz[1]):
+        janela = "Ruim"
+    elif (taxa <= quartiz[3]) and (taxa > quartiz[2]):
+        janela = "Boa"
+    elif ((taxa <= quartiz[4]) and (taxa > quartiz[3])) or (taxa > quartiz[4]):
+        janela = "Otima"
+    else:
+        janela = janela
 
-    points_per_turn = total_points / num_turns
+    st.header("Tabelas dos resultados")
 
-    for curr_point_num in range(total_points):
-        curr_turn, i = divmod(curr_point_num, points_per_turn)
-        angle = (curr_turn + 1) * 2 * math.pi * i / points_per_turn
-        radius = curr_point_num / total_points
-        x = radius * math.cos(angle)
-        y = radius * math.sin(angle)
-        data.append(Point(x, y))
+    st.write(pd.DataFrame({
+        'Mínimo': [quartiz[0]],
+        '1ª Quartiz': [quartiz[1]],
+        'Mediana':[quartiz[2]],
+        '3ª Quartiz':[quartiz[3]],
+        'Máximo':[quartiz[4]],
+        'Média':[media],
+        'Desvio Padrão':[desvio_padrao],
+    }))
 
-    st.altair_chart(alt.Chart(pd.DataFrame(data), height=500, width=500)
-        .mark_circle(color='#0068c9', opacity=0.5)
-        .encode(x='x:Q', y='y:Q'))
+    st.text(f'A janela de compra com a taxa de {taxa} é uma janela {janela}')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
