@@ -89,7 +89,7 @@ if taxa:
             'mode': 'lines',
             'line': {
                 'width':2,
-                'color': 'blue'
+                'color': 'red'
             },
             'name': 'Mediana Móvel'
         }
