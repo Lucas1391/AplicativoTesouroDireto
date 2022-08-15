@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import ssl
+import plotly.graph_objects as go
 from PIL import Image
 
 #image = Image.open("TESOURO.png")
