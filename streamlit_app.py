@@ -55,7 +55,7 @@ if taxa:
     else:
         janela = janela
 
-    st.header("Tabelas dos resultados")
+    st.header("Tabela dos resultados")
 
     st.write(pd.DataFrame({
         'Mínimo': [quartiz[0]],
@@ -108,8 +108,7 @@ if taxa:
         })
         #instanciar objeto Figure e plotar o gráfico
     fig = go.Figure(data=data, layout=layout)
-   
-
+    st.plotly_chart(fig, width=800, height=800)
     
    
     st.text(f'A janela de compra com a taxa de {taxa} é uma janela {janela}')
