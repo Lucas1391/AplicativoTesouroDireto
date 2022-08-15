@@ -68,17 +68,50 @@ if taxa:
     }))
 
     
-    chart_data = pd.DataFrame(
-    np.random.randn(20, 3),
-    columns=['a', 'b', 'c'])
 
+    trace1 = {
+            'x': df.index,
+            'y': filtro['Taxa Compra Manha'],
+            'type': 'scatter',
+            'mode': 'lines',
+            'line': {
+                'width':2,
+                'color': 'blue'
+            },
+            'name': f'Taxa do tesouro {Titulo}'
+        }
+    
+    
+    trace2 = {
+            'x': df.index,
+            'y': filtro['Taxa Compra Manha'].rolling(200).mean(),
+            'type': 'scatter',
+            'mode': 'lines',
+            'line': {
+                'width':2,
+                'color': 'blue'
+            },
+            'name': 'Mediana Móvel'
+        }
+    
+     #informar todos os dados e gráficos em uma lista
+     data = [trace1,trace2]
+    
+     #configurar o layout do gráfico
+     layout = go.Layout({
+            'title': {
+                'text': 'Gráfico Taxa de Compra e Mediana Móvel',
+                'font': {
+                    'size': 20
+                }
+            }
+        })
+        #instanciar objeto Figure e plotar o gráfico
+     fig = go.Figure(data=data, layout=layout)
+   
 
-    """chart_data = pd.DataFrame(
-    filtro['Taxa Compra Manha'],filtro['Taxa Compra Manha'].rolling(200).mean(),
-    columns=['Taxa','Mediana'])"""
-
-    st.text("Grafico Taxa e Mediana Móvel")
-    st.plotly_chart(filtro['Taxa Compra Manha'])
+    
+   
     st.text(f'A janela de compra com a taxa de {taxa} é uma janela {janela}')
 
 
