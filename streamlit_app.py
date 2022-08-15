@@ -68,8 +68,8 @@ if taxa:
 
     
     chart_data = pd.DataFrame(
-    filtro['Taxa Compra Manha'],filtro['Taxa Compra Manha'].rolling(200).mean()
-    columns=['Taxa', 'Mediana'])
+    filtro['Taxa Compra Manha'],filtro['Taxa Compra Manha'].rolling(200).mean(),
+    columns=['Taxa','Mediana'])
 
     st.text("Grafico Taxa e Mediana Móvel")
     st.line_chart(chart_data)
