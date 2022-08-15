@@ -70,7 +70,7 @@ if taxa:
     
 
     trace1 = {
-            'x': df.index,
+            'x': filtro.index,
             'y': filtro['Taxa Compra Manha'],
             'type': 'scatter',
             'mode': 'lines',
@@ -83,7 +83,7 @@ if taxa:
     
     
     trace2 = {
-            'x': df.index,
+            'x': filtro.index,
             'y': filtro['Taxa Compra Manha'].rolling(200).mean(),
             'type': 'scatter',
             'mode': 'lines',
