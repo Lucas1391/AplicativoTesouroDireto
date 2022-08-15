@@ -88,8 +88,8 @@ if taxa:
             'type': 'scatter',
             'mode': 'lines',
             'line': {
-                'width':2,
-                'color': 'red'
+                'width':1,
+                'color': 'yellow'
             },
             'name': 'Mediana Móvel'
         }
