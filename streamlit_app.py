@@ -67,10 +67,11 @@ if taxa:
     }))
 
     
-     chart_data = pd.DataFrame(
-     filtro['Taxa Compra Manha'],filtro['Taxa Compra Manha'].rolling(200).mean()
-     columns=['Taxa', 'Mediana'])
+    chart_data = pd.DataFrame(
+    filtro['Taxa Compra Manha'],filtro['Taxa Compra Manha'].rolling(200).mean()
+    columns=['Taxa', 'Mediana'])
 
+    st.text("Grafico Taxa e Mediana Móvel")
     st.line_chart(chart_data)
     st.text(f'A janela de compra com a taxa de {taxa} é uma janela {janela}')
 
