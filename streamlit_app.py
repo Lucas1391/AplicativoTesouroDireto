@@ -95,10 +95,10 @@ if taxa:
         }
     
      #informar todos os dados e gráficos em uma lista
-     data = [trace1,trace2]
+    data = [trace1,trace2]
     
      #configurar o layout do gráfico
-     layout = go.Layout({
+    layout = go.Layout({
             'title': {
                 'text': 'Gráfico Taxa de Compra e Mediana Móvel',
                 'font': {
@@ -107,7 +107,7 @@ if taxa:
             }
         })
         #instanciar objeto Figure e plotar o gráfico
-     fig = go.Figure(data=data, layout=layout)
+    fig = go.Figure(data=data, layout=layout)
    
 
     
