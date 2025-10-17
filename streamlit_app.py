@@ -3,7 +3,7 @@ import streamlit as st
 
 # Função para o nível 1
 def nivel_1():
-    minha_lista = ["tirar blusa", "tirar short", "tirar sutiã", "tirar calcinha","Três tapinhas no Bumbum","Caricia na pinta ou pipiu"]
+    minha_lista = ["tirar blusa", "tirar short", "tirar sutiã", "tirar calcinha ou cueca","Três tapinhas no Bumbum","Caricia na pinta ou pipiu","Falar alguma coisa baixinho no ouvido"]
     valor_aleatorio = random.choice(minha_lista)
     st.write(f"Opção sorteada: {valor_aleatorio}")
 
